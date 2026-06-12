@@ -11,42 +11,40 @@ const DEFAULT_CASE_DATA = {
     questions: [
         {
             id: "q1",
-            question: "¿Qué sugerencias podríamos darle a este vecino tomando en cuenta que ya tienen una menor de 5 años (lactante de 4 meses) con desnutrición aguda?",
+            question: "¿Qué sugerencias podríamos darle a este vecino tomando en cuenta que ya tienen una menor de 5 años (en este caso, una lactante de 4 meses) con desnutrición aguda?",
             answers: [
-                "<strong>Prioridad de Lactancia Materna Exclusiva (LME):</strong> A los 4 meses, la bebé NO debe consumir papillas, jugos ni caldos. Su intestino y riñones no están listos. La recomendación principal es promover la lactancia materna exclusiva y frecuente.",
-                "<strong>Optimización Nutricional Materna:</strong> Dado que el alimento depende 100% de la madre, se debe nutrir a ella con abundantes grasas saludables (aguacate, semillas de sésamo, aceite de oliva virgen) y proteínas de fácil asimilación, además de infundir infusiones seguras de plantas remineralizantes (como la ortiga mayor o alfalfa, bajo estricto control).",
-                "<strong>Esterilización e Higiene WASH:</strong> Si por indicación médica se complementa con fórmula de inicio, capacitar a los padres en hervir rigurosamente el agua y desinfectar biberones para evitar diarreas que consuman sus pocas calorías.",
-                "<strong>Evitar Nutracéuticos / Tés de Hierbas en el Lactante:</strong> Aclarar que la bebé no debe recibir té de manzanilla u otras hierbas directas, ya que compiten con el espacio de su pequeño estómago y alteran su absorción de nutrientes."
+                "<strong>Fomento de la Lactancia Materna Exclusiva (LME):</strong> A los 4 meses, la bebé no debe consumir sólidos ni papillas. Su sistema digestivo e inmunológico es inmaduro. La recomendación naturopática y médica principal es la lactancia materna exclusiva y a libre demanda.",
+                "<strong>Nutrición e Hidratación de la Madre:</strong> Dado que la bebé depende 100% de la leche materna, debemos nutrir a la madre. Se sugieren alimentos ricos en grasas saludables (semillas, aguacate, aceite de oliva), proteínas de alta calidad y suplementación natural con hierro, ácido fólico y calcio para mejorar el perfil de la leche.",
+                "<strong>Higiene en la Lactancia y Hogar:</strong> Evitar biberones o agua sin hervir (que introducen bacterias). Si se usa fórmula por indicación médica, asegurar la esterilización rigurosa del agua y utensilios para evitar diarreas infecciosas.",
+                "<strong>Monitoreo Clínico:</strong> Seguir rigurosamente el tratamiento médico ya prescrito (nutrición terapéutica si aplica) y vigilar la ganancia de peso semanal."
             ]
         },
         {
             id: "q2",
             question: "¿Recomendarían a la mamá el embarazo en los próximos 6 meses?",
             answers: [
-                "<strong>Recomendación: Contraindicación Absoluta.</strong> Se aconseja esperar al menos 18 a 24 meses antes de un nuevo embarazo.",
-                "<strong>Evitar el Síndrome de Desgaste Materno:</strong> La madre se encuentra en un estado nutricional y físico debilitado (reflejado en la desnutrición de su bebé). Un embarazo temprano vaciaría por completo sus depósitos de hierro, calcio y vitaminas.",
-                "<strong>Riesgo Gestacional Elevado:</strong> Aumenta exponencialmente la probabilidad de parto pretérmino, restricción del crecimiento intrauterino (RCIU) y recién nacidos con muy bajo peso."
+                "<strong>Recomendación:</strong> No se recomienda.",
+                "<strong>Justificación:</strong> A los 6 meses, la bebé tendrá solo 10 meses y estará en plena transición de alimentación complementaria, requiriendo aún mucha leche materna. Un nuevo embarazo a los 6 meses provocará el Síndrome de Desgaste Materno. La madre necesita recuperar micronutrientes y energía. Quedar embarazada tan pronto aumentaría el riesgo de parto prematuro, bajo peso al nacer para el nuevo bebé y afectaría severamente el desarrollo de la bebé actual."
             ]
         },
         {
             id: "q3",
             question: "¿Consideran que puede influir el hecho de que la mamá esté lactando y que la bebé tenga desnutrición aguda en el próximo embarazo? ¿cómo?",
             answers: [
-                "<strong>Sí, la influencia es crítica y bidireccional.</strong>",
-                "<strong>Agotamiento y Sequedad de la Leche:</strong> Las hormonas de la gestación (progesterona) disminuyen drásticamente el volumen de producción láctea. Esto privaría a la bebé de 4 meses de su único alimento en un momento de desnutrición aguda severa.",
-                "<strong>Desvío Nutricional:</strong> El organismo de la madre dará prioridad al nuevo feto en el útero. Como la madre ya está desnutrida, la poca leche que produzca perderá calidad calórica y de micronutrientes, empeorando el estado de la bebé actual.",
-                "<strong>Riesgo de Contracciones Uterinas:</strong> La succión del pezón por parte de la lactante estimula la liberación de oxitocina, lo cual genera contracciones uterinas. En una madre con alto estrés fisiológico, esto incrementa el riesgo de aborto espontáneo."
+                "<strong>Influencia:</strong> Sí, influye de manera drástica.",
+                "<strong>Agotamiento del Suministro de Leche:</strong> Las hormonas del nuevo embarazo (especialmente la progesterona) tienden a reducir significativamente la producción de leche materna y a alterar su sabor, lo que podría provocar un destete abrupto involuntario de la bebé de 10 meses, quien ya sufre desnutrición aguda y necesita esa leche.",
+                "<strong>Deficiencia de Nutrientes Crítica:</strong> El cuerpo materno dará prioridad al desarrollo del nuevo feto en el útero, disminuyendo los nutrientes destinados a la leche de la lactante actual. La madre sufrirá descalcificación, anemia y desnutrición severa, lo que perjudica a los tres (madre, bebé actual y futuro feto)."
             ]
         },
         {
             id: "q4",
             question: "¿Qué otra información necesitarían obtener de la familia para poder elaborarles un plan de sugerencias?",
             answers: [
-                "<strong>Patrón y Frecuencia de la Lactancia:</strong> Duración de las tomas, efectividad del agarre del pezón, y si hay presencia de dolor o grietas en la madre.",
-                "<strong>Encuesta Dietética Materna (24 Horas):</strong> Registro detallado de alimentos consumidos por la madre para corregir deficiencias nutricionales específicas.",
-                "<strong>Historial Médico Completo de la Bebé:</strong> Saber qué tipo de desnutrición aguda presenta (marasmo o kwashiorkor), peso al nacer, curva de crecimiento y medicamentos/suplementos que indicó el médico.",
-                "<strong>Hábitos de Higiene y Saneamiento:</strong> Fuente y potabilidad del agua familiar, y lavado de manos.",
-                "<strong>Situación Socioeconómica:</strong> Evaluar si existe inseguridad alimentaria severa en el hogar para gestionar ayuda con redes de apoyo social o comunitario."
+                "<strong>Técnica de Lactancia:</strong> Frecuencia de las tomas, duración, posición y si la bebé succiona de forma eficaz.",
+                "<strong>Alimentación de la Madre:</strong> Registro de lo que come la madre diariamente (para corregir deficiencias nutricionales que afecten la leche).",
+                "<strong>Consumo de Líquidos/Tés:</strong> Indagar si le están dando agua, tés de hierbas u otros líquidos a la bebé (lo cual es muy común y peligroso a los 4 meses, ya que reduce la toma de leche y causa infecciones).",
+                "<strong>Indicaciones Médicas Previas:</strong> Qué tratamiento específico o suplementos les dejó el médico que ya visitaron.",
+                "<strong>Condiciones Sanitarias:</strong> Acceso a agua potable y saneamiento en la casa."
             ]
         }
     ]
