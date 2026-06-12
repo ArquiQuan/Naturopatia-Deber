@@ -1,11 +1,11 @@
 /**
- * Naturopathy Simulator - Application Logic
- * Manages video playback events, interactive questions (accordion),
- * local storage persistence, and the visual editor mode.
+ * Naturopathy Simulator - Application Logic (Production Version)
+ * Manages video playback events and the interactive questions (accordion).
+ * All custom editing and bypass features are disabled for teacher evaluation.
  */
 
-// Data Structure: Seed / Default Case Data
-const DEFAULT_CASE_DATA = {
+// Data Structure: Core Case Data
+const CASE_DATA = {
     title: "Lactante de 4 meses con Desnutrición Aguda",
     description: "Un vecino y su pareja acuden a consulta buscando apoyo alimentario para su familia. Tienen una bebé de 4 meses ya diagnosticada con desnutrición aguda por un médico. Adicionalmente, la madre desea planificar un nuevo embarazo en los próximos 6 meses.",
     questions: [
@@ -50,10 +50,6 @@ const DEFAULT_CASE_DATA = {
     ]
 };
 
-// Application State
-let caseData = null;
-let isUnlocked = false;
-
 // DOM Elements
 const elements = {
     caseVideo: document.getElementById('case-video'),
@@ -64,57 +60,10 @@ const elements = {
     lockCard: document.getElementById('questions-lock-card'),
     questionsCard: document.getElementById('questions-card'),
     accordionContainer: document.getElementById('accordion-container'),
-    bypassLockBtn: document.getElementById('bypass-lock-btn'),
     
     caseTitle: document.getElementById('case-title'),
-    caseDescription: document.getElementById('case-description'),
-    
-    // Editor Elements
-    toggleEditorBtn: document.getElementById('toggle-editor-btn'),
-    closeEditorBtn: document.getElementById('close-editor-btn'),
-    editorSidebar: document.getElementById('editor-sidebar'),
-    sidebarOverlay: document.getElementById('sidebar-overlay'),
-    editorForm: document.getElementById('editor-form'),
-    inputCaseTitle: document.getElementById('input-case-title'),
-    inputCaseDesc: document.getElementById('input-case-desc'),
-    editorQuestionsList: document.getElementById('editor-questions-list'),
-    addQuestionBtn: document.getElementById('add-question-btn'),
-    resetDefaultBtn: document.getElementById('reset-default-btn'),
-    exportJsonBtn: document.getElementById('export-json-btn'),
-    importJsonInput: document.getElementById('import-json-input')
+    caseDescription: document.getElementById('case-description')
 };
-
-// ==========================================================================
-// STATE MANAGEMENT & PERSISTENCE
-// ==========================================================================
-
-/**
- * Loads the case data from LocalStorage or falls back to defaults.
- */
-function loadCaseData() {
-    try {
-        const stored = localStorage.getItem('naturopatia_case_data');
-        if (stored) {
-            caseData = JSON.parse(stored);
-        } else {
-            caseData = JSON.parse(JSON.stringify(DEFAULT_CASE_DATA));
-        }
-    } catch (e) {
-        console.error("Error al cargar datos de localStorage:", e);
-        caseData = JSON.parse(JSON.stringify(DEFAULT_CASE_DATA));
-    }
-}
-
-/**
- * Saves the current case data to LocalStorage.
- */
-function saveCaseData() {
-    try {
-        localStorage.setItem('naturopatia_case_data', JSON.stringify(caseData));
-    } catch (e) {
-        console.error("Error al guardar datos en localStorage:", e);
-    }
-}
 
 // ==========================================================================
 // RENDER FUNCTIONS
@@ -125,13 +74,13 @@ function saveCaseData() {
  */
 function renderCase() {
     // Render Title & Description
-    elements.caseTitle.textContent = caseData.title;
-    elements.caseDescription.textContent = caseData.description;
+    elements.caseTitle.textContent = CASE_DATA.title;
+    elements.caseDescription.textContent = CASE_DATA.description;
     
     // Render Accordion
     elements.accordionContainer.innerHTML = '';
     
-    caseData.questions.forEach((q, index) => {
+    CASE_DATA.questions.forEach((q, index) => {
         const item = document.createElement('div');
         item.className = 'accordion-item';
         item.dataset.id = q.id;
@@ -190,44 +139,6 @@ function renderCase() {
     });
 }
 
-/**
- * Renders the configuration inputs in the Editor sidebar.
- */
-function renderEditor() {
-    elements.inputCaseTitle.value = caseData.title;
-    elements.inputCaseDesc.value = caseData.description;
-    
-    elements.editorQuestionsList.innerHTML = '';
-    
-    caseData.questions.forEach((q, index) => {
-        const item = document.createElement('div');
-        item.className = 'editor-question-item';
-        item.dataset.id = q.id;
-        
-        item.innerHTML = `
-            <div class="eq-header">
-                <span class="eq-number">PREGUNTA ${index + 1}</span>
-                <button type="button" class="btn-remove-q" data-id="${q.id}">Eliminar</button>
-            </div>
-            <div class="form-group">
-                <label>Pregunta</label>
-                <input type="text" class="input-q-text" value="${q.question}" required>
-            </div>
-            <div class="form-group">
-                <label>Recomendaciones (Una por línea)</label>
-                <textarea class="input-q-answers" rows="4" required>${q.answers.join('\n')}</textarea>
-            </div>
-        `;
-        
-        // Remove button handler
-        item.querySelector('.btn-remove-q').addEventListener('click', (e) => {
-            removeQuestion(q.id);
-        });
-        
-        elements.editorQuestionsList.appendChild(item);
-    });
-}
-
 // ==========================================================================
 // SIMULATOR INTERACTIONS (VIDEO & LOCKS)
 // ==========================================================================
@@ -236,7 +147,6 @@ function renderEditor() {
  * Unlocks the questions panel.
  */
 function unlockQuestions() {
-    isUnlocked = true;
     elements.lockCard.classList.add('hidden-element');
     elements.questionsCard.classList.remove('hidden-element');
     
@@ -244,15 +154,6 @@ function unlockQuestions() {
     if (window.innerWidth <= 992) {
         elements.questionsCard.scrollIntoView({ behavior: 'smooth' });
     }
-}
-
-/**
- * Locks the questions panel.
- */
-function lockQuestions() {
-    isUnlocked = false;
-    elements.lockCard.classList.remove('hidden-element');
-    elements.questionsCard.classList.add('hidden-element');
 }
 
 /**
@@ -296,170 +197,6 @@ function setupVideoEvents() {
             console.log("Error al intentar reproducir el video:", err);
         });
     });
-    
-    // Bypass lock button (Demo/Review mode)
-    elements.bypassLockBtn.addEventListener('click', () => {
-        unlockQuestions();
-        elements.videoStatus.textContent = "Modo Demo Activo";
-    });
-}
-
-// ==========================================================================
-// EDITOR OPERATIONS (ADD, REMOVE, SAVE, EXPORT, IMPORT)
-// ==========================================================================
-
-/**
- * Adds a new blank question to the editor state.
- */
-function addQuestion() {
-    const newId = 'q_' + Date.now();
-    caseData.questions.push({
-        id: newId,
-        question: "Nueva Pregunta Guía",
-        answers: [
-            "Recomendación número uno.",
-            "Recomendación número dos."
-        ]
-    });
-    renderEditor();
-    
-    // Scroll editor body to the bottom
-    const sidebarBody = document.querySelector('.sidebar-body');
-    sidebarBody.scrollTop = sidebarBody.scrollHeight;
-}
-
-/**
- * Removes a question from the editor state.
- */
-function removeQuestion(id) {
-    if (caseData.questions.length <= 1) {
-        alert("El simulador debe tener al menos una pregunta.");
-        return;
-    }
-    caseData.questions = caseData.questions.filter(q => q.id !== id);
-    renderEditor();
-}
-
-/**
- * Saves modifications from the Editor Form back into application state.
- */
-function saveEditorChanges(e) {
-    e.preventDefault();
-    
-    // Update Title & Description
-    caseData.title = elements.inputCaseTitle.value;
-    caseData.description = elements.inputCaseDesc.value;
-    
-    // Update Questions & Answers
-    const questionItems = elements.editorQuestionsList.querySelectorAll('.editor-question-item');
-    const updatedQuestions = [];
-    
-    questionItems.forEach(item => {
-        const id = item.dataset.id;
-        const questionText = item.querySelector('.input-q-text').value;
-        const rawAnswers = item.querySelector('.input-q-answers').value;
-        
-        // Split text by lines, clean whitespaces, filter out empty lines
-        const answersList = rawAnswers.split('\n')
-            .map(line => line.trim())
-            .filter(line => line.length > 0);
-            
-        updatedQuestions.push({
-            id: id,
-            question: questionText,
-            answers: answersList
-        });
-    });
-    
-    caseData.questions = updatedQuestions;
-    
-    // Save, Render, and Close
-    saveCaseData();
-    renderCase();
-    closeEditor();
-}
-
-/**
- * Restores initial seed data.
- */
-function resetToDefault() {
-    if (confirm("¿Estás seguro de que deseas restablecer el caso original? Se perderán todas tus personalizaciones.")) {
-        caseData = JSON.parse(JSON.stringify(DEFAULT_CASE_DATA));
-        saveCaseData();
-        renderCase();
-        renderEditor();
-        closeEditor();
-    }
-}
-
-/**
- * Exports current configuration to a JSON file.
- */
-function exportCaseJSON() {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(caseData, null, 2));
-    const downloadAnchor = document.createElement('a');
-    downloadAnchor.setAttribute("href", dataStr);
-    
-    // Safe slugified title
-    const filename = caseData.title.toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/(^-|-$)/g, '') + '-caso.json';
-        
-    downloadAnchor.setAttribute("download", filename);
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    downloadAnchor.remove();
-}
-
-/**
- * Imports configuration from a user-provided JSON file.
- */
-function importCaseJSON(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    
-    const reader = new FileReader();
-    reader.onload = function(evt) {
-        try {
-            const importedData = JSON.parse(evt.target.result);
-            
-            // Validation
-            if (importedData.title && importedData.description && Array.isArray(importedData.questions)) {
-                caseData = importedData;
-                saveCaseData();
-                renderCase();
-                renderEditor();
-                closeEditor();
-                alert("¡Caso clínico importado exitosamente!");
-            } else {
-                alert("Error: El archivo JSON no tiene la estructura válida del simulador.");
-            }
-        } catch (err) {
-            alert("Error al leer el archivo JSON: Formato inválido.");
-            console.error(err);
-        }
-    };
-    reader.readAsText(file);
-    
-    // Reset file input value so same file can be uploaded again
-    e.target.value = '';
-}
-
-// ==========================================================================
-// SIDEBAR TOGGLERS
-// ==========================================================================
-
-function openEditor() {
-    renderEditor();
-    elements.editorSidebar.classList.add('open');
-    elements.sidebarOverlay.classList.add('open');
-    document.body.style.overflow = 'hidden'; // Stop background scrolling
-}
-
-function closeEditor() {
-    elements.editorSidebar.classList.remove('open');
-    elements.sidebarOverlay.classList.remove('open');
-    document.body.style.overflow = '';
 }
 
 // ==========================================================================
@@ -467,28 +204,11 @@ function closeEditor() {
 // ==========================================================================
 
 function init() {
-    // Load local storage or default data
-    loadCaseData();
-    
     // Render initial structures
     renderCase();
     
     // Set up Video player events
     setupVideoEvents();
-    
-    // Register Editor Toggles
-    elements.toggleEditorBtn.addEventListener('click', openEditor);
-    elements.closeEditorBtn.addEventListener('click', closeEditor);
-    elements.sidebarOverlay.addEventListener('click', closeEditor);
-    
-    // Register Editor Form operations
-    elements.addQuestionBtn.addEventListener('click', addQuestion);
-    elements.editorForm.addEventListener('submit', saveEditorChanges);
-    elements.resetDefaultBtn.addEventListener('click', resetToDefault);
-    
-    // Register Backup Operations
-    elements.exportJsonBtn.addEventListener('click', exportCaseJSON);
-    elements.importJsonInput.addEventListener('change', importCaseJSON);
 }
 
 // Run app
